@@ -9,6 +9,9 @@ export default function Login() {
     function redirectToDash() {
         router.push('/dashboard')
     }
+    function redirectToUser() {
+        router.push('/user')
+    }
 
     return (
         <div className="flex items-center justify-center h-screen">
@@ -37,7 +40,7 @@ export default function Login() {
                     </label>
                     <div className="card-actions justify-end flex flex-row">
                         <button className="btn btn-primary" onClick={redirectToDash}>Entrar</button>
-                        <button className="btn btn-ghost">Cadastrar</button>
+                        <button className="btn btn-ghost" onClick={redirectToUser}>Cadastrar</button>
                     </div>
                 </div>
             </div>

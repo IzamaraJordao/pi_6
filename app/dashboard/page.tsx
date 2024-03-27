@@ -6,7 +6,10 @@ export default function Dashboard() {
 
     return (
         <div>
-            <h1>Dash</h1>
+            <h1>Andre</h1>
+            <h1>Andre</h1>
+            <h1>Andre</h1>
+            <h1>Andre</h1>
         </div>
     )
 }
