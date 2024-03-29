@@ -1,20 +1,61 @@
 'use client'
 import React, {useState} from "react";
-
-import { useRouter } from 'next/navigation'
+import {useRouter} from 'next/navigation'
 import Image from 'next/image'
 import logo from '../../public/images/indica.jpg'
 
+
 export default function User() {
     const router = useRouter()
-    function redirectToDash() {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [success, setSuccess] = useState(false);
+
+    async function saveUser() {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({name, email, password}),
+        })
+        const data = await response.json()
+
+        if (data.error) {
+        } else {
+            setSuccess(true);
+            setTimeout(() => {
+                router.push('/dashboard')
+            }, 2000)
+        }
+
+    }
+
+
+    function alerta() {
+        return (
+            <div role="alert" className="alert alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     className="stroke-current shrink-0 w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>
+                        <strong>Info</strong> - Usuário cadastrado com sucesso!
+                    </span>
+            </div>
+        )
+    }
+
+    function redirectToLogin() {
         router.push('/login')
     }
-    function redirectToUser() {
-        console.log('save DB')
-        ///salvar no bd
-    }
+
+
     return (
+        <>
+            { success ? alerta() : null }
         <div className="flex flex-column items-center justify-center h-screen">
             <div>
                 <div className="flex justify-center">
@@ -26,7 +67,8 @@ export default function User() {
                         <path
                             d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z"/>
                     </svg>
-                    <input type="text" className="grow" placeholder="Username"/>
+                    <input type="text" className="grow" placeholder="Nome" value={name}
+                           onChange={(e) => setName(e.target.value)}/>
                 </label>
                 <label className="input input-bordered flex items-center gap-2  mt-8">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -36,7 +78,8 @@ export default function User() {
                         <path
                             d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z"/>
                     </svg>
-                    <input type="text" className="grow" placeholder="Email"/>
+                    <input type="text" className="grow" placeholder="Email" value={email}
+                           onChange={(e) => setEmail(e.target.value)}/>
                 </label>
 
                 <label className="input input-bordered flex items-center gap-2 mt-8">
@@ -46,13 +89,16 @@ export default function User() {
                               d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
                               clipRule="evenodd"/>
                     </svg>
-                    <input type="password" className="grow" value="password"/>
+                    <input type="password" className="grow" placeholder="Senha" value={password}
+                           onChange={(e) => setPassword(e.target.value)}/>
                 </label>
                 <div className="card-actions justify-end flex flex-row mt-8">
-                    <button className="btn btn-primary" onClick={redirectToUser}>Salvar</button>
-                    <button className="btn btn-ghost" onClick={redirectToDash}>Voltar</button>
+                    <button className="btn btn-primary" onClick={saveUser}>Cadastrar</button>
+                    <button className="btn btn-ghost" onClick={redirectToLogin}>Voltar</button>
                 </div>
             </div>
+
         </div>
+        </>
     )
 }
