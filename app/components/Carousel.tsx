@@ -1,7 +1,11 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {Carrocel} from "@/type/interface";
+import {Modal} from "@/app/components/ModalCarrocel";
 
 export default function Carousel() {
     const [film, setFilm] = useState([])
+    const [selectedFilm, setSelectedFilm] = useState<Carrocel | null>(null);
+    const [modalOpen, setModalOpen] = useState(false);
 
     async function getFilm() {
         const response = await fetch(process.env.NEXT_PUBLIC_API_MOVIE + '/popular', {
@@ -14,53 +18,39 @@ export default function Carousel() {
         })
         const data = await response.json()
         setFilm(data.results)
-        console.log(data)
     }
 
-    getFilm().then()
+    function handleImageClick(film: Carrocel) {
+        setSelectedFilm(film);
+    }
+
+    function closeModal() {
+        setSelectedFilm(null);
+    }
+
+    useEffect(() => {
+        getFilm().then()
+    }, [])
+
     return (
         <>
-            <div className="carousel carousel-center max-w-md p-4 space-x-4 bg-neutral rounded-box">
+            <div className="carousel carousel-center w-84 h-40 p-4 space-x-4 bg-neutral rounded-box">
 
                 {film.map((item: any, index) => {
                     return (
-                        <div key={index} className="carousel-item">
+                        <div key={index} className="carousel-item cursor-pointer"
+                             onClick={() => handleImageClick(item)}>
                             <img src={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
                                  className="rounded-box"/>
                         </div>
-                    )
-                    })
+                    )})
                 }
 
-                {/*<div className="carousel-item">*/}
-                {/*    <img src="https://daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.jpg"*/}
-                {/*         className="rounded-box"/>*/}
-                {/*</div>*/}
-                {/*<div className="carousel-item">*/}
-                {/*    <img src="https://daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.jpg"*/}
-                {/*         className="rounded-box"/>*/}
-                {/*</div>*/}
-                {/*<div className="carousel-item">*/}
-                {/*    <img src="https://daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.jpg"*/}
-                {/*         className="rounded-box"/>*/}
-                {/*</div>*/}
-                {/*<div className="carousel-item">*/}
-                {/*    <img src="https://daisyui.com/images/stock/photo-1494253109108-2e30c049369b.jpg"*/}
-                {/*         className="rounded-box"/>*/}
-                {/*</div>*/}
-                {/*<div className="carousel-item">*/}
-                {/*    <img src="https://daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.jpg"*/}
-                {/*         className="rounded-box"/>*/}
-                {/*</div>*/}
-                {/*<div className="carousel-item">*/}
-                {/*    <img src="https://daisyui.com/images/stock/photo-1559181567-c3190ca9959b.jpg"*/}
-                {/*         className="rounded-box"/>*/}
-                {/*</div>*/}
-                {/*<div className="carousel-item">*/}
-                {/*    <img src="https://daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.jpg"*/}
-                {/*         className="rounded-box"/>*/}
-                {/*</div>*/}
+                {selectedFilm && (
+                    <Modal film={selectedFilm} onClose={closeModal} />
+                )}
             </div>
         </>
     );
 }
+

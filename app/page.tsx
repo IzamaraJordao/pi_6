@@ -1,9 +1,10 @@
-import Image from "next/image";
+
 
 export default function Home() {
-  return (
-   <div>
-     Testeeee
-   </div>
-  );
+   return(
+         <div>
+              <h1>Home</h1>
+             <button className="btn btn-primary">Iniciar Indicação</button>
+         </div>
+   )
 }
