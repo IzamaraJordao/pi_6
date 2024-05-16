@@ -3,28 +3,24 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from 'next/navigation'
 import Image from 'next/image'
 import logo from '../../public/images/indica.jpg'
+import Tabela from "@/app/components/Tabela";
+import Film from "@/app/components/Film";
 
 
 export default function Home() {
     const router = useRouter()
     const [name, setName] = useState('')
-    const [users, setUsers] = useState([])
+    const [users, setUsers] = useState(true)
+    const [film, setFilm] = useState(false)
 
-    useEffect(() => {
-        getUsers().then()
-    }, [])
+    function onFilm() {
+        setFilm(true)
+        setUsers(false)
+    }
 
-    async function getUsers() {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/users', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-
-        })
-        const data = await response.json()
-        console.log(data)
-        setUsers(data)
+    function onUsers() {
+        setFilm(false)
+        setUsers(true)
     }
 
     return (
@@ -65,7 +61,7 @@ export default function Home() {
             </div>
             <div className="bg-gray-700 h-2/3 w-full flex flex-row justify-around items-center">
                 <div className="w-1/5 h-5/6 bg-gray-800  rounded-2xl flex flex-col justify-start items-center">
-                    <button className="btn btn-wide mt-8">
+                    <button className="btn btn-wide mt-8" onClick={onUsers}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                              className="w-4 h-4 opacity-70">
                             <path
@@ -74,7 +70,7 @@ export default function Home() {
                         Usuários
                     </button>
 
-                    <button className="btn btn-wide mt-8">
+                    <button className="btn btn-wide mt-8" onClick={onFilm}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                              className="w-4 h-4 opacity-70">
                             <path
@@ -93,60 +89,8 @@ export default function Home() {
                     </button>
                 </div>
                 <div className="w-3/5 h-5/6 bg-gray-800  rounded-2xl">
-                    <div className="overflow-x-auto">
-                        <table className="table">
-                            {/* head */}
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Telefone</th>
-                                <th>E-mail</th>
-                                <th>Ações</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                users.map((user: any, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{user.id}</td>
-                                            <td>{user.name}</td>
-                                            <td>{user.email}</td>
-                                            <td>{user.createdAt}</td>
-                                            <td>
-                                                <button className="btn btn-sm btn-primary">Editar</button>
-                                                <button className="btn btn-sm btn-error">Excluir</button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
-
-                            {/*/!* row 1 *!/*/}
-                            {/*<tr>*/}
-                            {/*    <th>1</th>*/}
-                            {/*    <td>Cy Ganderton</td>*/}
-                            {/*    <td>Quality Control Specialist</td>*/}
-                            {/*    <td>Blue</td>*/}
-                            {/*</tr>*/}
-                            {/*/!* row 2 *!/*/}
-                            {/*<tr className="hover">*/}
-                            {/*    <th>2</th>*/}
-                            {/*    <td>Hart Hagerty</td>*/}
-                            {/*    <td>Desktop Support Technician</td>*/}
-                            {/*    <td>Purple</td>*/}
-                            {/*</tr>*/}
-                            {/*/!* row 3 *!/*/}
-                            {/*<tr>*/}
-                            {/*    <th>3</th>*/}
-                            {/*    <td>Brice Swyre</td>*/}
-                            {/*    <td>Tax Accountant</td>*/}
-                            {/*    <td>Red</td>*/}
-                            {/*</tr>*/}
-                            </tbody>
-                        </table>
-                    </div>
+                    {users && (<Tabela />)}
+                    {film && (<Film />)}
                 </div>
             </div>
         </div>
