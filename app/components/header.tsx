@@ -13,7 +13,7 @@ export default function Header() {
         router.push('/')
     }
     return (
-        <div className="flex flex-row justify-between items-center bg-black w-full p-4">
+        <div className="flex flex-row justify-between items-center bg-black w-full  p-4">
             <Image src={logo} alt="Logo" className="max-w-60 h-10" />
             <div className="flex flex-row items-center gap-4 cursor-pointer"
                 onClick={redirectToLogin}>

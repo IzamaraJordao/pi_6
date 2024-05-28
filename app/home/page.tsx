@@ -1,12 +1,7 @@
 'use client'
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import {useRouter} from 'next/navigation'
-import Image from 'next/image'
-import logo from '../../public/images/indica.jpg'
 import Tabela from "@/app/components/Tabela";
-import Film from "@/app/components/Film";
-import Camera from "@/app/components/Camera";
-import Undici from "undici-types";
 import Header from "@/app/components/header";
 import ModalFilme from "@/app/components/modalFilme";
 import TabelaFilmes from "@/app/components/TabelaFilmes";
@@ -38,9 +33,9 @@ export default function Home() {
     };
 
     return (
-        <div className="flex flex-col h-lvh w-full">
+        <div className="flex flex-col h-lvh w-full bg-gray-700">
             <Header/>
-            <div className="bg-gray-700 h-1/3 w-full flex items-center justify-around">
+            <div className="bg-gray-700 mt-4 h-1/3 w-full flex items-center justify-around">
                 <div
                     className="card w-48 h-40  bg-gray-800 text-primary-content flex flex-col justify-center items-center">
                     <div className="card-body flex flex-col justify-center items-center">
@@ -82,10 +77,10 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row justify-end items-end h-8 bg-gray-700 w-full">
-                {film && <button className="btn mr-20 bg-green-300 text-gray-950 hover:bg-green-400" onClick={openModal}>Adicionar Filme</button> }
+            <div className="flex flex-row justify-end items-end bg-gray-700 w-full">
+                {film && <button className="btn mr-20 bg-yellow-400 text-black mt-4 hover:bg-black hover:text-yellow-400" onClick={openModal}>Adicionar Filme</button> }
             </div>
-            <div className="bg-gray-700 h-2/3 w-full flex flex-row justify-around items-center">
+            <div className="bg-gray-700 h-2/3 w-full flex flex-row justify-around items-start">
 
                 <div className="w-1/5 h-5/6 bg-gray-800  rounded-2xl flex flex-col justify-start items-center">
                     <button className="btn btn-wide mt-8 w-4/5" onClick={onUsers}>
@@ -115,14 +110,13 @@ export default function Home() {
                         Configurações
                     </button>
                 </div>
-                <div className="w-3/5 h-5/6 bg-gray-800  rounded-2xl">
+                <div className="w-3/5 h-5/6 bg-gray-800  rounded-2xl overflow-hidden p-2">
                     {users && (<Tabela/>)}
-                    {/*{film && (<Film/>)}*/}
                     {film && (<TabelaFilmes/>)}
                 </div>
             </div>
             {
-                modalOpen && (<ModalFilme onClose={closeModal}/>)
+                modalOpen && (<ModalFilme onClose={closeModal} movie={null}/>)
             }
 
         </div>

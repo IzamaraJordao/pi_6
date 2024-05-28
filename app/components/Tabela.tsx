@@ -1,6 +1,7 @@
 import {useRouter} from "next/navigation";
 import React, {useEffect, useState} from "react";
-import {ModalSearchList} from "@/app/components/ModalSearchList";
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
+
 
 export default function Tabela() {
 
@@ -55,10 +56,14 @@ export default function Tabela() {
                                     <td>{user.email}</td>
                                     <td>{user.createdAt}</td>
                                     <td>
-                                        <button className="btn btn-sm btn-primary mr-4">Editar</button>
-                                        <button className="btn btn-sm btn-error" onClick={() => deleteUser(user.id)}
-                                        >Excluir
-                                        </button>
+                                        <div className="flex flex-row justify-center items-center ">
+                                            <PencilIcon className="h-6 w-6 text-blue-500 cursor-pointer mr-4"
+                                                        onClick={() => deleteUser(user.id)}
+                                            />
+                                            <TrashIcon className="h-6 w-6 text-red-500 cursor-pointer"
+
+                                            />
+                                        </div>
                                     </td>
                                 </tr>
                             )

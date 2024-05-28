@@ -1,10 +1,14 @@
 import {useRouter} from "next/navigation";
 import React, {useEffect, useState} from "react";
-import {ModalSearchList} from "@/app/components/ModalSearchList";
+import ModalFilme from "@/app/components/modalFilme";
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
+
 
 export default function TabelaFilmes() {
-
+    const router = useRouter()
     const [movies, setMovies] = useState([])
+    const [selectedMovie, setSelectedMovie] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         getUsers().then()
@@ -18,6 +22,7 @@ export default function TabelaFilmes() {
 
         })
         const data = await response.json()
+        console.log(data)
         setMovies(data)
     }
     function deleteUser(id: number) {
@@ -31,10 +36,32 @@ export default function TabelaFilmes() {
         })
     }
 
+    function editMovie(movie: any) {
+        setSelectedMovie(movie);
+        setIsModalOpen(true);
+    }
+
+    function closeModal() {
+        setIsModalOpen(false);
+        setSelectedMovie(null);
+        getUsers(); // Refresh the list after closing the modal
+    }
+
+    function deleteMovie(id: number) {
+        fetch(process.env.NEXT_PUBLIC_API_URL + '/movies/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(() => {
+            getUsers().then()
+        })
+    }
+
     return (
         <>
-            <div className="overflow-x-auto">
-                <table className="table">
+            <div className="overflow-x-auto max-w-full max-h-full">
+                <table className="table w-full">
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -56,10 +83,15 @@ export default function TabelaFilmes() {
                                     <td>{formattedDate}</td>
                                     <td>{movie.overview}</td>
                                     <td>
-                                        <button className="btn btn-sm btn-primary mr-4">Editar</button>
-                                        <button className="btn btn-sm btn-error" onClick={() => deleteUser(movie.id)}
-                                        >Excluir
-                                        </button>
+                                        <div className="flex flex-row justify-center items-center ">
+                                            <PencilIcon className="h-6 w-6 text-blue-500 cursor-pointer mr-4"
+                                                        onClick={() => editMovie(movie)}
+                                            />
+                                            <TrashIcon className="h-6 w-6 text-red-500 cursor-pointer"
+                                                         onClick={() => deleteMovie(movie.id)}
+                                            />
+                                        </div>
+
                                     </td>
                                 </tr>
                             )
@@ -68,6 +100,7 @@ export default function TabelaFilmes() {
                     </tbody>
                 </table>
             </div>
+            {isModalOpen && <ModalFilme movie={selectedMovie} onClose={closeModal} />}
         </>
     )
 }

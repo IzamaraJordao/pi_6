@@ -4,8 +4,15 @@ import React, {useEffect, useState} from "react";
 import {Formik, Field, Form, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2'
+import {Movie} from "@/type/interface";
 
-export default function ModalFilme({onClose}: { onClose: () => void }) {
+interface ModalFilmeProps {
+    movie: Movie | null;
+    onClose: () => void;
+}
+
+export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
+// export default function     ModalFilme({movie, onClose}) {
     const router = useRouter();
     const [categoria, setCategoria] = useState([])
 
@@ -22,74 +29,123 @@ export default function ModalFilme({onClose}: { onClose: () => void }) {
         dialog.addEventListener('close', onClose);
         getCateg().then()
 
+
     }, [onClose]);
 
 
-    const handleSubmit = async (values: any) => {
-        console.log(values)
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/movies', {
-            method: 'POST',
+    // const handleSubmit = async (values: any) => {
+    //     console.log(values)
+    //     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/movies', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             title: values.title,
+    //             originalLanguage: values.originalLanguage,
+    //             releaseDate: values.releaseDate + ':00' + 'Z',
+    //             productionCompanies: values.productionCompany,
+    //             overview: values.overview,
+    //             genreId: values.genre,
+    //             statusId: values.status,
+    //             runtime: Number(values.runtime),
+    //             image: values.coverImage,
+    //             popularity: 0,
+    //             voteAverage: 0,
+    //             voteCount: 0,
+    //             notification: true
+    //
+    //         }),
+    //     })
+    //     const data = await response.json()
+    //     console.log(data)
+    //     // if (data.error) {
+    //     //     await Swal.fire({
+    //     //         icon: 'error',
+    //     //         title: 'Oops...',
+    //     //         text: 'Something went wrong!',
+    //     //     })
+    //     // } else {
+    //     //     await Swal.fire({
+    //     //         position: "top-end",
+    //     //         icon: "success",
+    //     //         title: "Salvo!",
+    //     //         showConfirmButton: false,
+    //     //         timer: 1500
+    //     //     });
+    //     //     onClose()
+    //     // }
+    // }
+    // const save = async (values: any) => {
+    //     console.log(values)
+    //     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/users', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(values),
+    //     })
+    //     const data = await response.json()
+    //     console.log(data)
+    // }
+
+    const handleSubmit = async (values: Movie) => {
+        const method = movie?.id ? 'PUT' : 'POST';
+        const url = process.env.NEXT_PUBLIC_API_URL + '/movies/' + (movie?.id || '');
+        const response = await fetch(url, {
+            method,
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                title: values.title,
-                originalLanguage: values.originalLanguage,
-                releaseDate: values.releaseDate + ':00' + 'Z',
-                productionCompanies: values.productionCompany,
-                overview: values.overview,
-                genreId: values.genre,
-                statusId: values.status,
-                runtime: Number(values.runtime),
-                image: values.coverImage,
-                popularity: 0,
-                voteAverage: 0,
-                voteCount: 0,
-                notification: true
+                        id: movie?.id,
+                        title: values.title,
+                        originalLanguage: values.originalLanguage,
+                        releaseDate: values.releaseDate + ':00' + 'Z',
+                        // releaseDate: values.releaseDate + ':00' + 'Z',
+                        productionCompanies: values.productionCompanies,
+                        overview: values.overview,
+                        genreId: values.genre,
+                        statusId: values.status,
+                        runtime: Number(values.runtime),
+                        image: values.image,
+                        popularity: 0,
+                        voteAverage: 0,
+                        voteCount: 0,
+                        notification: true
+        }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+            await Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Salvo!",
+                showConfirmButton: false,
+                timer: 1500
+            });
+            onClose();
+        } else {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+            });
+        }
+    };
 
-            }),
-        })
-        const data = await response.json()
-        console.log(data)
-        // if (data.error) {
-        //     await Swal.fire({
-        //         icon: 'error',
-        //         title: 'Oops...',
-        //         text: 'Something went wrong!',
-        //     })
-        // } else {
-        //     await Swal.fire({
-        //         position: "top-end",
-        //         icon: "success",
-        //         title: "Salvo!",
-        //         showConfirmButton: false,
-        //         timer: 1500
-        //     });
-        //     onClose()
-        // }
-    }
-    const save = async (values: any) => {
-        console.log(values)
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(values),
-        })
-        const data = await response.json()
-        console.log(data)
-    }
 
-    const initialValues: any = {
+    const initialValues: Movie = movie || {
+        id: 0,
         title: '',
         originalLanguage: '',
         releaseDate: '',
-        productionCompany: '',
+        productionCompanies: '',
         genre: '',
+        image: '',
         status: '',
         runtime: 0,
-        coverImage: '',
+        // coverImage: '',
         overview: '',
     };
 
@@ -110,7 +166,7 @@ export default function ModalFilme({onClose}: { onClose: () => void }) {
         <dialog id="my_modal_4" className="modal">
             <div className="modal-box w-11/12 max-w-3xl">
                 <div className="flex flex-row justify-center">
-                    <h1 className="text-2xl font-bold">Cadastrar Filme</h1>
+                    <h1 className="text-2xl font-bold">{movie ? 'Editar Filme' : 'Cadastrar Filme'}</h1>
                 </div>
                 <Formik
                     initialValues={initialValues}
@@ -159,7 +215,7 @@ export default function ModalFilme({onClose}: { onClose: () => void }) {
                                             <span className="label-text">*Empresa de produção</span>
                                         </div>
                                         <Field
-                                            name="productionCompany"
+                                            name="productionCompanies"
                                             type="text" placeholder="Type here"
                                             className="input input-bordered w-full max-w-xs"/>
                                     </label>
@@ -210,7 +266,7 @@ export default function ModalFilme({onClose}: { onClose: () => void }) {
                                             <span className="label-text">*Imagem da Capa</span>
                                         </div>
                                         <Field
-                                            name="coverImage"
+                                            name="image"
                                             type="text" placeholder="Type here"
                                             className="input input-bordered w-full max-w-xs"/>
                                     </label>
@@ -232,7 +288,7 @@ export default function ModalFilme({onClose}: { onClose: () => void }) {
                                         type="submit">Save
                                 </button>
                                 <button
-                                    className="btn btn-wide mt-8 ml-2 bg-yellow-400 text-black"
+                                    className="btn bg-black border-2 border-yellow-400 mt-8 ml-2  text-yellow-400"
                                     onClick={onClose}>Fechar
                                 </button>
                             </div>
