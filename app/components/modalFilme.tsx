@@ -12,7 +12,6 @@ interface ModalFilmeProps {
 }
 
 export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
-// export default function     ModalFilme({movie, onClose}) {
     const router = useRouter();
     const [categoria, setCategoria] = useState([])
 
@@ -28,66 +27,8 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
         // @ts-ignore
         dialog.addEventListener('close', onClose);
         getCateg().then()
-
-
     }, [onClose]);
 
-
-    // const handleSubmit = async (values: any) => {
-    //     console.log(values)
-    //     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/movies', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({
-    //             title: values.title,
-    //             originalLanguage: values.originalLanguage,
-    //             releaseDate: values.releaseDate + ':00' + 'Z',
-    //             productionCompanies: values.productionCompany,
-    //             overview: values.overview,
-    //             genreId: values.genre,
-    //             statusId: values.status,
-    //             runtime: Number(values.runtime),
-    //             image: values.coverImage,
-    //             popularity: 0,
-    //             voteAverage: 0,
-    //             voteCount: 0,
-    //             notification: true
-    //
-    //         }),
-    //     })
-    //     const data = await response.json()
-    //     console.log(data)
-    //     // if (data.error) {
-    //     //     await Swal.fire({
-    //     //         icon: 'error',
-    //     //         title: 'Oops...',
-    //     //         text: 'Something went wrong!',
-    //     //     })
-    //     // } else {
-    //     //     await Swal.fire({
-    //     //         position: "top-end",
-    //     //         icon: "success",
-    //     //         title: "Salvo!",
-    //     //         showConfirmButton: false,
-    //     //         timer: 1500
-    //     //     });
-    //     //     onClose()
-    //     // }
-    // }
-    // const save = async (values: any) => {
-    //     console.log(values)
-    //     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/users', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(values),
-    //     })
-    //     const data = await response.json()
-    //     console.log(data)
-    // }
 
     const handleSubmit = async (values: Movie) => {
         const method = movie?.id ? 'PUT' : 'POST';
@@ -133,7 +74,6 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
             });
         }
     };
-
 
     const initialValues: Movie = movie || {
         id: 0,

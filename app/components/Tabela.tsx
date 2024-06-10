@@ -11,7 +11,7 @@ export default function Tabela() {
         getUsers().then()
     }, [])
     async function getUsers() {
-        const response = await fetch('http://localhost:3000/users', {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/users', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ export default function Tabela() {
 
     return (
         <>
-            <div className="overflow-x-auto">
+        <div className="overflow-x-auto max-w-full max-h-full">
                 <table className="table">
                     {/* head */}
                     <thead>

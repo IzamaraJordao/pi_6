@@ -11,20 +11,25 @@ export default function TabelaFilmes() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        getUsers().then()
+        getMovies();
     }, [])
-    async function getUsers() {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/movies/', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
 
-        })
-        const data = await response.json()
-        console.log(data)
-        setMovies(data)
+    async function getMovies() {
+        try {
+            const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/movies/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            setMovies(data);
+        } catch (error) {
+            console.error('Error fetching movies:', error);
+        }
     }
+
     function deleteUser(id: number) {
         fetch(process.env.NEXT_PUBLIC_API_URL + '/movies/' + id, {
             method: 'DELETE',
@@ -32,7 +37,7 @@ export default function TabelaFilmes() {
                 'Content-Type': 'application/json',
             },
         }).then(() => {
-            getUsers().then()
+            getMovies()
         })
     }
 
@@ -44,7 +49,7 @@ export default function TabelaFilmes() {
     function closeModal() {
         setIsModalOpen(false);
         setSelectedMovie(null);
-        getUsers(); // Refresh the list after closing the modal
+        getMovies();
     }
 
     function deleteMovie(id: number) {
@@ -54,7 +59,7 @@ export default function TabelaFilmes() {
                 'Content-Type': 'application/json',
             },
         }).then(() => {
-            getUsers().then()
+            getMovies();
         })
     }
 
