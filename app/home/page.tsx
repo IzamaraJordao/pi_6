@@ -1,5 +1,5 @@
 'use client'
-import React, { useState} from "react";
+import React, { useState, useCallback} from "react";
 import {useRouter} from 'next/navigation'
 import Tabela from "@/app/components/Tabela";
 import Header from "@/app/components/header";
@@ -14,6 +14,7 @@ export default function Home() {
     const [users, setUsers] = useState(true)
     const [film, setFilm] = useState(false)
     const [modalOpen, setModalOpen] = useState(false);
+    const [update, setUpdate] = useState<boolean>(false);
 
     function onFilm() {
         setFilm(true)
@@ -31,7 +32,12 @@ export default function Home() {
 
     const closeModal = () => {
         setModalOpen(false);
+
     };
+
+    const handleUpdate = useCallback(() => {
+        setUpdate(true);
+    }, []);
 
     return (
         <div className="flex flex-col h-lvh w-full bg-neutral-700">
@@ -76,11 +82,11 @@ export default function Home() {
                 </div>
                 <div className="w-3/5 h-5/6 bg-neutral-800   rounded-2xl overflow-hidden p-2">
                     {users && (<Tabela/>)}
-                    {film && (<TabelaFilmes/>)}
+                    {film && (<TabelaFilmes update={update} setUpdate={setUpdate} />)}
                 </div>
             </div>
             {
-                modalOpen && (<ModalFilme onClose={closeModal} movie={null}/>)
+                modalOpen && (<ModalFilme onClose={closeModal} onSave={handleUpdate}  movie={null}/>)
             }
 
         </div>

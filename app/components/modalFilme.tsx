@@ -9,9 +9,12 @@ import {Movie} from "@/type/interface";
 interface ModalFilmeProps {
     movie: Movie | null;
     onClose: () => void;
+    onSave: () => void;
 }
 
-export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
+// @ts-ignore
+// @ts-ignore
+export default function ModalFilme({ movie, onClose , onSave}: ModalFilmeProps) {
     const router = useRouter();
     const [categoria, setCategoria] = useState([])
 
@@ -65,6 +68,7 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                 showConfirmButton: false,
                 timer: 1500
             });
+            onSave();
             onClose();
         } else {
             await Swal.fire({
@@ -104,7 +108,7 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
 
     return (
         <dialog id="my_modal_4" className="modal">
-            <div className="modal-box w-11/12 max-w-3xl">
+            <div className="modal-box w-11/12 max-w-3xl  bg-neutral-700">
                 <div className="flex flex-row justify-center">
                     <h1 className="text-2xl font-bold">{movie ? 'Editar Filme' : 'Cadastrar Filme'}</h1>
                 </div>
@@ -124,8 +128,8 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                                         </div>
                                         <Field
                                             name="title"
-                                            type="text" placeholder="Type here"
-                                            className="input input-bordered w-full max-w-xs"/>
+                                            type="text" placeholder="Título do filme"
+                                            className="input input-bordered w-full max-w-xs  bg-neutral-800 "/>
                                     </label>
                                     <label className="form-control w-full max-w-xs">
                                         <div className="label">
@@ -134,7 +138,7 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                                         <Field
                                             name="originalLanguage"
                                             component="select"
-                                            title="select" className="select select-bordered w-full max-w-xs">
+                                            title="select" className="select select-bordered w-full max-w-xs  bg-neutral-800">
                                             <option>Selecionar</option>
                                             <option>Português</option>
                                             <option>Inglês</option>
@@ -148,7 +152,7 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                                         <Field
                                             name="releaseDate"
                                             type="datetime-local" placeholder="Type here"
-                                            className="input input-bordered w-full max-w-xs"/>
+                                            className="input input-bordered w-full max-w-xs  bg-neutral-800"/>
                                     </label>
                                     <label className="form-control w-full max-w-xs">
                                         <div className="label">
@@ -156,8 +160,8 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                                         </div>
                                         <Field
                                             name="productionCompanies"
-                                            type="text" placeholder="Type here"
-                                            className="input input-bordered w-full max-w-xs"/>
+                                            type="text" placeholder="Produção do filme"
+                                            className="input input-bordered w-full max-w-xs  bg-neutral-800"/>
                                     </label>
 
 
@@ -170,7 +174,7 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                                         <Field
                                             name="genre"
                                             component="select"
-                                            title="select" className="select select-bordered w-full max-w-xs">
+                                            title="select" className="select select-bordered w-full max-w-xs  bg-neutral-800">
                                             <option>Selecionar</option>
                                             {
                                                 categoria.map((cat: any) => (
@@ -179,14 +183,14 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                                             }
                                         </Field>
                                     </label>
-                                    <label className="form-control w-full max-w-xs">
+                                    <label className="form-control w-full max-w-xs ">
                                         <div className="label">
                                             <span className="label-text">Status</span>
                                         </div>
                                         <Field
                                             name="status"
                                             component="select"
-                                            title="select" className="select select-bordered w-full max-w-xs">
+                                            title="select" className="select select-bordered w-full max-w-xs  bg-neutral-800">
                                             <option>Selecionar</option>
                                             <option>Ativo</option>
                                             <option>Inativo</option>
@@ -194,12 +198,12 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                                     </label>
                                     <label className="form-control w-full max-w-xs">
                                         <div className="label">
-                                            <span className="label-text">Tempo de execução</span>
+                                            <span className="label-text">Tempo de execução(min)</span>
                                         </div>
                                         <Field
                                             name="runtime"
-                                            type="number" placeholder="Type here"
-                                            className="input input-bordered w-full max-w-xs"/>
+                                            type="number" placeholder="123"
+                                            className="input input-bordered w-full max-w-xs  bg-neutral-800"/>
                                     </label>
                                     <label className="form-control w-full max-w-xs">
                                         <div className="label">
@@ -207,8 +211,8 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                                         </div>
                                         <Field
                                             name="image"
-                                            type="text" placeholder="Type here"
-                                            className="input input-bordered w-full max-w-xs"/>
+                                            type="text" placeholder="http://imagem.com.br"
+                                            className="input input-bordered w-full max-w-xs  bg-neutral-800"/>
                                     </label>
                                     <label className="form-control w-full max-w-xs">
                                         <div className="label">
@@ -217,8 +221,8 @@ export default function ModalFilme({ movie, onClose}: ModalFilmeProps) {
                                         <Field
                                             name="overview"
                                             component="textarea"
-                                            className="textarea textarea-bordered h-24"
-                                            placeholder="Bio"/>
+                                            className="textarea textarea-bordered h-24  bg-neutral-800"
+                                            placeholder="Descrição"/>
 
                                     </label>
                                 </div>

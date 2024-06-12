@@ -3,16 +3,26 @@ import React, {useEffect, useState} from "react";
 import ModalFilme from "@/app/components/modalFilme";
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid'
 
+interface TabelaFilmesProps {
+    update: boolean;
+    setUpdate: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export default function TabelaFilmes() {
+const TabelaFilmes: React.FC<TabelaFilmesProps> = ({ update, setUpdate }) => {
     const router = useRouter()
     const [movies, setMovies] = useState([])
     const [selectedMovie, setSelectedMovie] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        getMovies();
-    }, [])
+        if (update) {
+            getMovies();
+            setUpdate(false); // Reseta a necessidade de atualização após carregar os dados
+        }else{
+            getMovies();
+        }
+
+    }, [update]);
 
     async function getMovies() {
         try {
@@ -105,7 +115,9 @@ export default function TabelaFilmes() {
                     </tbody>
                 </table>
             </div>
-            {isModalOpen && <ModalFilme movie={selectedMovie} onClose={closeModal} />}
+            {isModalOpen && <ModalFilme movie={selectedMovie} onClose={closeModal} onSave={getMovies}/>}
         </>
     )
 }
+
+export default TabelaFilmes;
